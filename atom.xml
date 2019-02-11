@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yulong.site/"/>
-  <updated>2019-02-10T07:15:34.009Z</updated>
+  <updated>2019-02-11T11:37:29.670Z</updated>
   <id>http://yulong.site/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>linux系统磁盘分区挂载</title>
+    <link href="http://yulong.site/2019/02/11/fdisk/"/>
+    <id>http://yulong.site/2019/02/11/fdisk/</id>
+    <published>2019-02-11T11:37:29.670Z</published>
+    <updated>2019-02-11T11:37:29.670Z</updated>
+    
+    <content type="html"><![CDATA[<p>首先看新磁盘的基本情况</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l</span><br></pre></td></tr></table></figure><p>输出如下</p><p><img src="http://pydison.oss-cn-hangzhou.aliyuncs.com/pics/fdisk1.png" alt=""></p><h2 id="给磁盘分区"><a href="#给磁盘分区" class="headerlink" title="给磁盘分区"></a>给磁盘分区</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk /dev/sdb</span><br></pre></td></tr></table></figure><p>fdisk参数：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p、打印分区表。</span><br><span class="line">n、新建一个新分区。</span><br><span class="line">d、删除一个分区。</span><br><span class="line">q、退出不保存。</span><br><span class="line">w、把分区写进分区表，保存并退出</span><br></pre></td></tr></table></figure><p>依次按照提示输入</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">n</span><br><span class="line">p</span><br><span class="line">1 (第几个分区就写几)</span><br><span class="line">默认</span><br><span class="line">大小（比如   +100G）</span><br></pre></td></tr></table></figure><p>这样，第一个分区就分好了，大小100G。后面的分区如法炮制。</p><p>如果要删除分区的话，一次按照提示输入</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">d</span><br><span class="line">p</span><br><span class="line">3（最后一个分区的数字，因为要从后往前删）</span><br></pre></td></tr></table></figure><h2 id="格式化分区"><a href="#格式化分区" class="headerlink" title="格式化分区"></a>格式化分区</h2><p>检查分区</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dd if=/dev/zero of=/dev/sdb1 bs=1M count=128</span><br><span class="line">dd if=/dev/zero of=/dev/sdb2 bs=1M count=128</span><br><span class="line">dd if=/dev/zero of=/dev/sdb3 bs=1M count=128</span><br></pre></td></tr></table></figure><p>格式化分区</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkfs.ext4 /dev/sdb1</span><br><span class="line">mkfs.ext4 /dev/sdb2</span><br><span class="line">mkfs.ext4 /dev/sdb3</span><br></pre></td></tr></table></figure><h2 id="挂载分区"><a href="#挂载分区" class="headerlink" title="挂载分区"></a>挂载分区</h2><p>建立文件夹。比如我们以如下方式挂载<br>sdb1挂载到 <code>/var/www/html</code><br>sdb2挂载到 <code>/var/lib/mysql</code><br>sdb3挂载到 <code>/backup</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/sdb3 /backup</span><br><span class="line">mount /dev/sdb2 /var/lib/mysql</span><br><span class="line">mount /dev/sdb1 /var/www/html</span><br></pre></td></tr></table></figure><p>写入分区表<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;/dev/sdb1  /var/www/html ext4    defaults    0  0&apos; &gt;&gt; /etc/fstab</span><br><span class="line">echo &apos;/dev/sdb2  /var/lib/mysql ext4    defaults    0  0&apos; &gt;&gt; /etc/fstab</span><br><span class="line">echo &apos;/dev/sdb3  /backup ext4    defaults    0  0&apos; &gt;&gt; /etc/fstab</span><br></pre></td></tr></table></figure><p></p><p>查看分区情况 <code>df -h</code></p><p><img src="http://pydison.oss-cn-hangzhou.aliyuncs.com/pics/fdisk2.png" alt="此处输入图片的描述"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;首先看新磁盘的基本情况&lt;/p&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;co
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>在Apache下部署python框架web项目</title>
