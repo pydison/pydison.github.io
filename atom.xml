@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yulong.site/"/>
-  <updated>2019-02-11T11:37:29.670Z</updated>
+  <updated>2019-02-12T07:31:04.555Z</updated>
   <id>http://yulong.site/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>安装python3.7</title>
+    <link href="http://yulong.site/2019/02/12/python3.7/"/>
+    <id>http://yulong.site/2019/02/12/python3.7/</id>
+    <published>2019-02-12T07:31:04.555Z</published>
+    <updated>2019-02-12T07:31:04.555Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>一般来说，centos自带的是python2.6<br>升级python之前，先准备好环境，安装一些必要的包</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum groupinstall &quot;Development Tools&quot;</span><br><span class="line">yum install readline readline-devel zlib* bzip2-devel ncurses-devel sqlite-devel libffi-devel -y</span><br></pre></td></tr></table></figure><p>重点准备ssl库:下载libreSSL源码包，并解压编译安装</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.9.0.tar.gz</span><br><span class="line">tar -xvf libressl-2.9.0.tar.gz</span><br><span class="line">yum erase openssl-devel</span><br><span class="line">cd libressl-2.9.0</span><br><span class="line">./configure --prefix=/usr/local</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">openssl version</span><br></pre></td></tr></table></figure><p>这时候虽然装好了，但是系统还未识别，需要专门改一下配置<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ld.so.conf.d/libressl-2.9.0.conf</span><br></pre></td></tr></table></figure><p></p><p>将libssl库安装路径加入文件<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lib</span><br></pre></td></tr></table></figure><p></p><p>保存，并重新加载库文件<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldconfig -v</span><br></pre></td></tr></table></figure><p></p><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>官网下载源码包，并解压</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz</span><br><span class="line">tar -xvf Python-3.7.2.tar.xz</span><br></pre></td></tr></table></figure><p>去python源码包目录，vim Modules/Setup.dist,去掉以下内容的注释<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SSL=/usr/local  #注意这里的路径，如果不一样，请改成这个</span><br><span class="line">_ssl _ssl.c \</span><br><span class="line">        -DUSE_SSLexport LDFLAGS=&quot;-L/usr/local/lib&quot; -I$(SSL)/include -I$(SSL)/include/openssl \</span><br><span class="line">        -L$(SSL)/lib -lssl -lcrypto</span><br></pre></td></tr></table></figure><p></p><h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;安装依赖&quot;&gt;&lt;a href=&quot;#安装依赖&quot; class=&quot;headerlink&quot; title=&quot;安装依赖&quot;&gt;&lt;/a&gt;安装依赖&lt;/h2&gt;&lt;p&gt;一般来说，centos自带的是python2.6&lt;br&gt;升级python之前，先准备好环境，安装一些必要的包&lt;/p&gt;&lt;fig
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>linux系统磁盘分区挂载</title>
