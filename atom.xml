@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yulong.site/"/>
-  <updated>2019-05-17T17:53:42.425Z</updated>
+  <updated>2019-05-17T19:09:51.396Z</updated>
   <id>http://yulong.site/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Jseq使用教程</title>
+    <link href="http://yulong.site/2019/05/18/jseq/"/>
+    <id>http://yulong.site/2019/05/18/jseq/</id>
+    <published>2019-05-17T16:00:00.000Z</published>
+    <updated>2019-05-17T19:09:51.396Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="演示接口"><a href="#演示接口" class="headerlink" title="演示接口"></a>演示接口</h2><p>baseurl:<a href="http://t.weather.sojson.com/api/weather/city/" target="_blank" rel="noopener">http://t.weather.sojson.com/api/weather/city/</a><br>params :城市码<br>接口格式:baseurl+城市码</p><p>接口A: <a href="http://t.weather.sojson.com/api/weather/city/101050108" target="_blank" rel="noopener">http://t.weather.sojson.com/api/weather/city/101050108</a><br>接口B: <a href="http://t.weather.sojson.com/api/weather/city/101050607" target="_blank" rel="noopener">http://t.weather.sojson.com/api/weather/city/101050607</a><br>接口C: <a href="http://t.weather.sojson.com/api/weather/city/101120201" target="_blank" rel="noopener">http://t.weather.sojson.com/api/weather/city/101120201</a><br>……</p><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>实例化一个类:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J=Jseq(baseurl)</span><br></pre></td></tr></table></figure><p>如果用到cookie:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J.cookies=your_cookies</span><br></pre></td></tr></table></figure><p>如果需要并发:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J.multi=1</span><br></pre></td></tr></table></figure><h2 id="需求场景一"><a href="#需求场景一" class="headerlink" title="需求场景一"></a>需求场景一</h2><p>为了统计A市刮风的情况,要拿到A城市每天的风向,期望返回[v,v,v,v……]</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">result=J.j_list((101050108,),&quot;fx&quot;,(&quot;data&quot;,&quot;forecast&quot;))</span><br></pre></td></tr></table></figure><h2 id="需求场景二"><a href="#需求场景二" class="headerlink" title="需求场景二"></a>需求场景二</h2><p>要拿到A、B、C、D、……等 所有城市的 每天的 日出时间 和 日落时间 和 最高温度 和 最低温度<br>期望返回<br></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"> &#123;&quot;sunrise&quot;:v,&quot;sunset&quot;:v,&quot;high&quot;:v,&quot;low&quot;:v&#125;,</span><br><span class="line"> &#123;&quot;sunrise&quot;:v,&quot;sunset&quot;:v,&quot;high&quot;:v,&quot;low&quot;:v&#125;,</span><br><span class="line"> &#123;&quot;sunrise&quot;:v,&quot;sunset&quot;:v,&quot;high&quot;:v,&quot;low&quot;:v&#125;,</span><br><span class="line"> &#123;&quot;sunrise&quot;:v,&quot;sunset&quot;:v,&quot;high&quot;:v,&quot;low&quot;:v&#125;,</span><br><span class="line"> ……</span><br><span class="line"> ……</span><br><span class="line">]</span><br></pre></td></tr></table></figure><p></p><p>调用方式如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mylist=(101050108,101050607,101120201,……) #或者可以是个迭代器，只要可迭代即可</span><br><span class="line">result=J.j_ld(mylist,(&quot;data&quot;,&quot;forecast&quot;),&quot;sunrise&quot;,&quot;sunset&quot;,&quot;high&quot;,&quot;low&quot;)</span><br></pre></td></tr></table></figure><h2 id="接口diff"><a href="#接口diff" class="headerlink" title="接口diff"></a>接口diff</h2><p>假设要给 线上接口 和 测试接口 做diff</p><p>online_url :<a href="http://t.weather.sojson.com/api/weather/city/" target="_blank" rel="noopener">http://t.weather.sojson.com/api/weather/city/</a><br>test_url :<a href="http://test.weather.sojson.com/api/weather/city/" target="_blank" rel="noopener">http://test.weather.sojson.com/api/weather/city/</a></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J=Jseq(online_url,test_url)</span><br></pre></td></tr></table></figure><p>全量diff<br>输出结果是一个json文件，整体结构基于原接口结构。<br>其中无diff的字段不会在结果中出现，有diff的字段会在末尾节点生出两个字段:{online:v1,test:v2}</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=J.diffall(mylist)</span><br></pre></td></tr></table></figure><p>定制字段diff:只想比对 天气情况，天气提示，风力 这三个字段<br>输出结果是一个json文件，整体结构基于定制后的结构<br>其中无diff的字段不会在结果中出现，有diff的字段会在末尾节点生出两个字段:{online:v1,test:v2}</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result=J.diff(mylist,(&quot;data&quot;,&quot;forecast&quot;),&quot;type&quot;,&quot;notice&quot;,&quot;fl&quot;)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;演示接口&quot;&gt;&lt;a href=&quot;#演示接口&quot; class=&quot;headerlink&quot; title=&quot;演示接口&quot;&gt;&lt;/a&gt;演示接口&lt;/h2&gt;&lt;p&gt;baseurl:&lt;a href=&quot;http://t.weather.sojson.com/api/weather/city/
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hexo搭建与维护</title>
