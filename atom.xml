@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yulong.site/"/>
-  <updated>2019-02-14T11:24:07.748Z</updated>
+  <updated>2019-05-17T17:53:42.425Z</updated>
   <id>http://yulong.site/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hexo搭建与维护</title>
+    <link href="http://yulong.site/2019/05/17/blog/"/>
+    <id>http://yulong.site/2019/05/17/blog/</id>
+    <published>2019-05-16T16:00:00.000Z</published>
+    <updated>2019-05-17T17:53:42.425Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li><p>编写md文件，放在<code>mblog/source/_posts</code>目录</p></li><li><p><code>hexo server</code> ,本地看效果</p></li><li><p><code>hexo g</code></p></li><li><p><code>hexo d</code></p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;&lt;li&gt;&lt;p&gt;编写md文件，放在&lt;code&gt;mblog/source/_posts&lt;/code&gt;目录&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;hexo server&lt;/code&gt; ,本地看效果&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;code&gt;hexo g&lt;/code&gt;&lt;/p&gt;
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>rrdtool的安装配置和使用</title>
